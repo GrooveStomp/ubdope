@@ -20,7 +20,7 @@ class DoorkeeperClient < Sinatra::Base
     end
 
     def markdown(text)
-      options  = { :autolink => true, :space_after_headers => true, :fenced_code_blocks => true }
+      options  = { autolink: true, space_after_headers: true, fenced_code_blocks: true }
       markdown = Redcarpet::Markdown.new(HTMLRenderer, options)
       markdown.render(text)
     end
@@ -34,13 +34,13 @@ class DoorkeeperClient < Sinatra::Base
     OAuth2::Client.new(
       ENV['OAUTH2_CLIENT_ID'],
       ENV['OAUTH2_CLIENT_SECRET'],
-      :site         => ENV['SITE'] || "http://doorkeeper-provider.herokuapp.com",
-      :token_method => token_method,
+      site:         ENV['SITE'] || "http://api.lvh.me:3000",
+      token_method: token_method,
     )
   end
 
   def access_token
-    OAuth2::AccessToken.new(client, session[:access_token], :refresh_token => session[:refresh_token])
+    OAuth2::AccessToken.new(client, session[:access_token], refresh_token: session[:refresh_token])
   end
 
   def redirect_uri
@@ -51,9 +51,13 @@ class DoorkeeperClient < Sinatra::Base
     erb :home
   end
 
+  get '/accounts' do
+
+  end
+
   get '/sign_in' do
-    scope = params[:scope] || "public"
-    redirect client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => scope)
+    scope = params[:scope] # || "public"
+    redirect client.auth_code.authorize_url(redirect_uri: redirect_uri) #, scope: scope)
   end
 
   get '/sign_out' do
@@ -62,7 +66,7 @@ class DoorkeeperClient < Sinatra::Base
   end
 
   get '/callback' do
-    new_token = client.auth_code.get_token(params[:code], :redirect_uri => redirect_uri)
+    new_token = client.auth_code.get_token(params[:code], redirect_uri: redirect_uri)
     session[:access_token]  = new_token.token
     session[:refresh_token] = new_token.refresh_token
     redirect '/'
@@ -78,11 +82,11 @@ class DoorkeeperClient < Sinatra::Base
   get '/explore/:api' do
     raise "Please call a valid endpoint" unless params[:api]
     begin
-      response = access_token.get("/api/v1/#{params[:api]}")
+      response = access_token.get("/#{params[:api]}")
       @json = JSON.parse(response.body)
-      erb :explore, :layout => !request.xhr?
+      erb :explore, layout: !request.xhr?
     rescue OAuth2::Error => @error
-      erb :error, :layout => !request.xhr?
+      erb :error, layout: !request.xhr?
     end
   end
 end
