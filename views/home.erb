@@ -2,8 +2,8 @@
   <div class="row">
     <div class="span16">
       <% unless signed_in? %>
-        <h3>Sign in first to explore the provider's API</h3>
-        <p><a href="/sign_in" class="btn primary">Sign in with OAuth 2 provider »</a></p>
+        <h3>Sign in to Unbounce</h3>
+        <p><a href="/sign_in" class="btn primary">Sign in</a></p>
       <% end %>
     </div>
   </div>
@@ -17,8 +17,6 @@
 
         <div class="well">
           <a href="/explore/accounts.json" class="btn" data-explore>Accounts</a>
-          <a href="/explore/me.json" class="btn" data-explore>My Credentials</a>
-          <a href="/explore/profiles.json" class="btn" data-explore>Profiles</a>
           <a href="/sign_out" class="btn primary">Sign out</a>
         </div>
 
