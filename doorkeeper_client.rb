@@ -34,7 +34,7 @@ class DoorkeeperClient < Sinatra::Base
     OAuth2::Client.new(
       ENV['OAUTH2_CLIENT_ID'],
       ENV['OAUTH2_CLIENT_SECRET'],
-      site:         ENV['SITE'] || "https://api-test.unbounce.com",
+      site:         ENV['SITE'] || "https://api.unbounce.com",
       token_method: token_method,
     )
   end
