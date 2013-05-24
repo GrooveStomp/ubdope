@@ -1,0 +1,18 @@
+<section>
+  <div class="row">
+    <div class="span16">
+      <h2>Select Which Page</h2>
+
+      <div class="well">
+        <ul>
+          <% @pages.each do |page| %>
+            <li>
+              <a href="page/<%= page['id'] %>"><%= page['name'] %></a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>

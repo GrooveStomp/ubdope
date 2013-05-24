@@ -3,4 +3,11 @@ source "http://rubygems.org"
 gem 'sinatra'
 gem 'oauth2'
 gem 'pry'
-gem 'redcarpet'
+gem 'pg'
+gem 'debugger'
+
+
+
+
+gem 'awesome_print'
+gem 'crack'

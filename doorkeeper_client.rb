@@ -1,3 +1,17 @@
+require 'awesome_print'
+require 'csv'
+require 'multi_json'
+require 'net/https'
+require 'optparse'
+require 'uri'
+
+
+require './lib/ub/api'
+require './lib/ub/account'
+require './lib/ub/accounts'
+require './lib/ub/sub_accounts'
+require './lib/ub/pages'
+require './lib/ub/page'
 require "sinatra/base"
 require "./lib/html_renderer"
 
@@ -17,16 +31,6 @@ class DoorkeeperClient < Sinatra::Base
 
     def signed_in?
       !session[:access_token].nil?
-    end
-
-    def markdown(text)
-      options  = { autolink: true, space_after_headers: true, fenced_code_blocks: true }
-      markdown = Redcarpet::Markdown.new(HTMLRenderer, options)
-      markdown.render(text)
-    end
-
-    def markdown_readme
-      markdown(File.read(File.join(File.dirname(__FILE__), "README.md")))
     end
   end
 
@@ -48,11 +52,55 @@ class DoorkeeperClient < Sinatra::Base
   end
 
   get '/' do
-    erb :home
+    erb :login
   end
 
-  get '/accounts' do
+  get '/hierarchy_select' do
+    erb :hierarchy_select
+  end
 
+  get '/page_select' do
+    @accounts = Ub::Accounts.new(ubapi)
+    @pages = []
+    @accounts.each { |a| @pages += Ub::Pages.new(ubapi, account: a['id']).raw }
+    erb :page_select
+  end
+
+  get '/page/:id' do
+    @page = Ub::Page.new(ubapi, params[:id])
+    @data = [@page.raw]
+    erb :response
+  end
+
+  get '/sub_account_select' do
+    @accounts = Ub::Accounts.new(ubapi)
+    @sub_accounts = []
+    @accounts.each { |a| @sub_accounts += Ub::SubAccounts.new(ubapi, a['id']).raw }
+    erb :sub_account_select
+  end
+
+  get '/sub_account/:id' do
+    @pages = Ub::Pages.new(ubapi, sub_account: params[:id])
+    @data = @pages.raw
+    erb :response
+  end
+
+  get '/account_select' do
+    @accounts = Ub::Accounts.new(ubapi)
+    erb :account_select
+  end
+
+  get '/account/:id' do
+    @pages = Ub::Pages.new(ubapi, account: params[:id])
+    @data = @pages.raw
+    erb :response
+  end
+
+  get '/all' do
+    @accounts = Ub::Accounts.new(ubapi)
+    @data = []
+    @accounts.each { |a| @data += Ub::Pages.new(ubapi, account: a['id']).raw }
+    erb :response
   end
 
   get '/sign_in' do
@@ -69,7 +117,7 @@ class DoorkeeperClient < Sinatra::Base
     new_token = client.auth_code.get_token(params[:code], redirect_uri: redirect_uri)
     session[:access_token]  = new_token.token
     session[:refresh_token] = new_token.refresh_token
-    redirect '/'
+    redirect '/hierarchy_select'
   end
 
   get '/refresh' do
@@ -79,14 +127,7 @@ class DoorkeeperClient < Sinatra::Base
     redirect '/'
   end
 
-  get '/explore/:api' do
-    raise "Please call a valid endpoint" unless params[:api]
-    begin
-      response = access_token.get("/#{params[:api]}")
-      @json = JSON.parse(response.body)
-      erb :explore, layout: !request.xhr?
-    rescue OAuth2::Error => @error
-      erb :error, layout: !request.xhr?
-    end
+  def ubapi
+    @ubapi ||= Ub::Api.new(access_token)
   end
 end

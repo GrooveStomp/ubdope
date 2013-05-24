@@ -1,0 +1,18 @@
+<section>
+  <div class="row">
+    <div class="span16">
+      <h2>Select Which Account</h2>
+
+      <div class="well">
+        <ul>
+          <% @accounts.each do |account| %>
+            <li>
+              <a href="account/<%= account['id'] %>"><%= account['name'] %></a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
