@@ -1,3 +1,9 @@
+# Development
+#ENV['OAUTH2_CLIENT_ID']           = "1138eb5f2e80ad4923cce77689f9c2016fb31783e068298b8385cd3c4dd3c85e"
+#ENV['OAUTH2_CLIENT_SECRET']       = "859fce38cc185b91c6cf63652cca427a60956fc92b6f1ba6d4e31fdf34eb8537"
+#ENV['OAUTH2_CLIENT_REDIRECT_URI'] = "http://localhost:9292/callback"
+
+# Production
 ENV['OAUTH2_CLIENT_ID']           = "4797f12db38054eb044ffe4c9b8b8411f0324dbd735241fb055a3515b093a0a3"
 ENV['OAUTH2_CLIENT_SECRET']       = "e10f6e0658a1975c66dd042bd1a4d921becf47475f0ba723bff0ea9d691c0b9a"
 ENV['OAUTH2_CLIENT_REDIRECT_URI'] = "http://ubdope.herokuapp.com/callback"
