@@ -82,7 +82,7 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/sub_account/:id' do
     @pages = Ub::Pages.new(ubapi, sub_account: params[:id])
-    @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
+    @data  = Ub::PageStats.new(ubapi, @pages.raw).raw
     csv_response(@data)
   end
 
@@ -93,7 +93,7 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/account/:id' do
     @pages = Ub::Pages.new(ubapi, account: params[:id])
-    @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
+    @data  = Ub::PageStats.new(ubapi, @pages.raw).raw
     csv_response(@data)
   end
 
@@ -101,7 +101,7 @@ class DoorkeeperClient < Sinatra::Base
     @accounts = Ub::Accounts.new(ubapi)
     @data = []
     @accounts.each { |a| @data += Ub::Pages.new(ubapi, account: a['id']).raw }
-    @data = Ub::PageStats.new(ubapi, @data[0..9]).raw
+    @data = Ub::PageStats.new(ubapi, @data).raw
     csv_response(@data)
   end
 
