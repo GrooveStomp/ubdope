@@ -4,13 +4,14 @@
       <h2>Select Which Sub-Account</h2>
 
       <div class="well">
-        <ul>
-          <% @sub_accounts.each do |sub| %>
-            <li>
-              <a href="sub_account/<%= sub['id'] %>"><%= sub['name'] %></a>
-            </li>
+        <% @data.each do |account, sub_accounts| %>
+          <h2><%= account['name'] %></h2>
+          <ul>
+          <% sub_accounts.each do |sub| %>
+            <li><a href="sub_account/<%= sub['id'] %>"><%= sub['name'] %></a>
           <% end %>
-        </ul>
+          </ul>
+        <% end %>
       </div>
 
     </div>

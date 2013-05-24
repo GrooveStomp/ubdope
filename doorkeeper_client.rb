@@ -75,8 +75,9 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/sub_account_select' do
     @accounts = Ub::Accounts.new(ubapi)
-    @sub_accounts = []
-    @accounts.each { |a| @sub_accounts += Ub::SubAccounts.new(ubapi, a['id']).raw }
+
+    @data = {}
+    @accounts.each { |a| @data[a['name']] = Ub::SubAccounts.new(ubapi, a['id']).raw }
     erb :sub_account_select
   end
 
