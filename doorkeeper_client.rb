@@ -12,6 +12,7 @@ require './lib/ub/accounts'
 require './lib/ub/sub_accounts'
 require './lib/ub/pages'
 require './lib/ub/page'
+require './lib/ub/page_stats'
 require "sinatra/base"
 require "./lib/html_renderer"
 
@@ -68,7 +69,7 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/page/:id' do
     @page = Ub::Page.new(ubapi, params[:id])
-    @data = [@page.raw]
+    @data = Ub::PageStats.new(ubapi, [@page.raw]).raw
     erb :response
   end
 
@@ -81,7 +82,7 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/sub_account/:id' do
     @pages = Ub::Pages.new(ubapi, sub_account: params[:id])
-    @data = @pages.raw[0..9]
+    @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
     erb :response
   end
 
@@ -92,7 +93,7 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/account/:id' do
     @pages = Ub::Pages.new(ubapi, account: params[:id])
-    @data = @pages.raw[0..9]
+    @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
     erb :response
   end
 
@@ -100,7 +101,7 @@ class DoorkeeperClient < Sinatra::Base
     @accounts = Ub::Accounts.new(ubapi)
     @data = []
     @accounts.each { |a| @data += Ub::Pages.new(ubapi, account: a['id']).raw }
-    @data = @data[0..9]
+    @data = Ub::PageStats.new(ubapi, @data[0..9]).raw
     erb :response
   end
 
