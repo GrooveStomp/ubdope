@@ -101,7 +101,7 @@ class DoorkeeperClient < Sinatra::Base
     @accounts = Ub::Accounts.new(ubapi)
     @data = []
     @accounts.each { |a| @data += Ub::Pages.new(ubapi, account: a['id']).raw }
-    @data = Ub::PageStats.new(ubapi, @data).raw
+    @data = Ub::PageStats.new(ubapi, @data[0..20]).raw
     csv_response(@data)
   end
 
