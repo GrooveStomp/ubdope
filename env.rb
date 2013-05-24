@@ -1,3 +1,3 @@
 ENV['OAUTH2_CLIENT_ID']           = "4797f12db38054eb044ffe4c9b8b8411f0324dbd735241fb055a3515b093a0a3"
 ENV['OAUTH2_CLIENT_SECRET']       = "e10f6e0658a1975c66dd042bd1a4d921becf47475f0ba723bff0ea9d691c0b9a"
-ENV['OAUTH2_CLIENT_REDIRECT_URI'] = "http://localhost:9292/callback"
+ENV['OAUTH2_CLIENT_REDIRECT_URI'] = "http://ubdope.herokuapp.com/callback"
