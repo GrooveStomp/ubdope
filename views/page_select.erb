@@ -4,13 +4,14 @@
       <h2>Select Which Page</h2>
 
       <div class="well">
-        <ul>
-          <% @pages.each do |page| %>
-            <li>
-              <a href="page/<%= page['id'] %>"><%= page['name'] %></a>
-            </li>
+        <% @data.each do |account, pages| %>
+          <h3>Account: <%= account %></h3>
+          <ul>
+          <% pages.each do |page| %>
+            <li><a href="page/<%= page['id'] %>"><%= page['name'] %></a>
           <% end %>
-        </ul>
+          </ul>
+        <% end %>
       </div>
 
     </div>

@@ -5,7 +5,7 @@
 
       <div class="well">
         <% @data.each do |account, sub_accounts| %>
-          <h2><%= account['name'] %></h2>
+          <h3>Account: <%= account %></h3>
           <ul>
           <% sub_accounts.each do |sub| %>
             <li><a href="sub_account/<%= sub['id'] %>"><%= sub['name'] %></a>

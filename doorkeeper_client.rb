@@ -62,8 +62,9 @@ class DoorkeeperClient < Sinatra::Base
 
   get '/page_select' do
     @accounts = Ub::Accounts.new(ubapi)
-    @pages = []
-    @accounts.each { |a| @pages += Ub::Pages.new(ubapi, account: a['id']).raw }
+
+    @data = {}
+    @accounts.each { |a| @data[a['name']] = Ub::Pages.new(ubapi, account: a['id']).raw }
     erb :page_select
   end
 
