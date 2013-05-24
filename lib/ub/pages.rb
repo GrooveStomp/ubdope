@@ -18,12 +18,12 @@ module Ub
     end
 
     def get_from_account(id)
-      @interface.get("/accounts/#{id}/pages")
+      @interface.get("/accounts/#{id}/pages?limit=10")
       @pages = @interface.response['pages']
     end
 
     def get_from_sub_account(id)
-      @interface.get("/sub_accounts/#{id}/pages")
+      @interface.get("/sub_accounts/#{id}/pages?limit=10")
       @pages = @interface.response['pages']
     end
   end
