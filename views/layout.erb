@@ -9,7 +9,8 @@
   <div class="topbar" data-scrollspy="scrollspy">
     <div class="fill">
       <div class="container">
-        <a class="brand" href="/">UB Dope (for Unbounce)</a>
+        <% link = signed_in? ? '/hierarchy_select' : '/' %>
+        <a class="brand" href="<%= link %>">UB Dope (for Unbounce)</a>
         <ul class="nav">
           <li><a href="/sign_out">Sign Out</a></li>
         </ul>
