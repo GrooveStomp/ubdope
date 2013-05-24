@@ -5,7 +5,6 @@ require 'net/https'
 require 'optparse'
 require 'uri'
 
-
 require './lib/ub/api'
 require './lib/ub/account'
 require './lib/ub/accounts'
@@ -13,8 +12,9 @@ require './lib/ub/sub_accounts'
 require './lib/ub/pages'
 require './lib/ub/page'
 require './lib/ub/page_stats'
-require "sinatra/base"
-require "./lib/html_renderer"
+require './lib/ub/pages_to_csv'
+
+require 'sinatra/base'
 
 # Load custom environment variables
 load 'env.rb' if File.exists?('env.rb')
@@ -70,7 +70,7 @@ class DoorkeeperClient < Sinatra::Base
   get '/page/:id' do
     @page = Ub::Page.new(ubapi, params[:id])
     @data = Ub::PageStats.new(ubapi, [@page.raw]).raw
-    erb :response
+    csv_response(@data)
   end
 
   get '/sub_account_select' do
@@ -83,7 +83,7 @@ class DoorkeeperClient < Sinatra::Base
   get '/sub_account/:id' do
     @pages = Ub::Pages.new(ubapi, sub_account: params[:id])
     @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
-    erb :response
+    csv_response(@data)
   end
 
   get '/account_select' do
@@ -94,7 +94,7 @@ class DoorkeeperClient < Sinatra::Base
   get '/account/:id' do
     @pages = Ub::Pages.new(ubapi, account: params[:id])
     @data  = Ub::PageStats.new(ubapi, @pages.raw[0..9]).raw
-    erb :response
+    csv_response(@data)
   end
 
   get '/all' do
@@ -102,7 +102,7 @@ class DoorkeeperClient < Sinatra::Base
     @data = []
     @accounts.each { |a| @data += Ub::Pages.new(ubapi, account: a['id']).raw }
     @data = Ub::PageStats.new(ubapi, @data[0..9]).raw
-    erb :response
+    csv_response(@data)
   end
 
   get '/sign_in' do
@@ -131,5 +131,11 @@ class DoorkeeperClient < Sinatra::Base
 
   def ubapi
     @ubapi ||= Ub::Api.new(access_token)
+  end
+
+  def csv_response(pages)
+    headers "Content-Disposition" => "attachment;filename=unbounce_report.csv",
+            "Content-Type"        => "application/octet-stream"
+    result = Ub::PagesToCsv.new(pages).csv
   end
 end
